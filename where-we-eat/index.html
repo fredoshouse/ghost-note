@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Where we'd take you | Ghost Note</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F3F0EA; --ink:#1C1B19; --ink-2:#4A4741; --muted:#8A857C; --rule:#D6D1C6; --wash:#E8E4DB;
+    --serif:"Newsreader", Georgia, "Times New Roman", serif;
+    --sans:"Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#181715; --ink:#EDEAE3; --ink-2:#BDB8AE; --muted:#8C877E; --rule:#34322E; --wash:#23221F;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#181715; --ink:#EDEAE3; --ink-2:#BDB8AE; --muted:#8C877E; --rule:#34322E; --wash:#23221F;
+  }
+  *,*::before,*::after{box-sizing:inherit}
+  html{scroll-padding-top:env(safe-area-inset-top,0px); scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{transition:none!important;animation:none!important} }
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--sans); font-size:17px; line-height:1.55; -webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--ink); outline-offset:3px; border-radius:2px}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 clamp(20px,5vw,56px)}
+
+  /* top strip */
+  .strip{display:flex; justify-content:space-between; align-items:baseline; padding:22px 0; border-bottom:1px solid var(--rule); font-size:14px; color:var(--ink-2)}
+  .strip strong{font-family:var(--serif); font-style:italic; font-weight:400; font-size:20px; color:var(--ink)}
+
+  /* hero */
+  .hero{padding:clamp(56px,11vw,140px) 0 clamp(40px,7vw,80px)}
+  .hero h1{font-family:var(--serif); font-weight:300; font-style:italic; font-size:clamp(56px,11vw,148px); line-height:.92; letter-spacing:-.02em; margin:0 0 .35em; max-width:10ch}
+  .hero .lede{max-width:34em; font-size:clamp(17px,1.6vw,19px); color:var(--ink-2); margin:0}
+  .toast{margin-top:clamp(40px,6vw,72px); display:grid; grid-template-columns:minmax(0,1fr); max-width:40em; border-left:1px solid var(--ink); padding-left:22px}
+  .toast p{font-family:var(--serif); font-size:clamp(22px,2.6vw,30px); line-height:1.3; margin:0 0 .5em}
+  .toast span{font-size:14px; color:var(--muted)}
+
+  /* city index */
+  .index{border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); padding:28px 0 32px}
+  .index p{margin:0 0 12px; font-size:14px; color:var(--muted)}
+  .index ul{list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:4px 26px}
+  .index a{font-family:var(--serif); font-size:clamp(26px,3.6vw,40px); text-decoration:none; line-height:1.25}
+  .index a:hover{font-style:italic}
+  .index sup{font-family:var(--sans); font-size:13px; color:var(--muted); margin-left:3px}
+
+  /* filters */
+  .filters{display:flex; flex-wrap:wrap; gap:8px; padding:28px 0 8px; align-items:center}
+  .filters span{font-size:14px; color:var(--muted); margin-right:6px}
+  .filters button{font:inherit; font-size:14px; background:transparent; color:var(--ink); border:1px solid var(--rule); border-radius:999px; padding:6px 14px; cursor:pointer}
+  .filters button[aria-pressed="true"]{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+
+  /* city sections */
+  .city{display:grid; grid-template-columns:minmax(0,260px) minmax(0,1fr); gap:clamp(20px,4vw,56px); padding:clamp(36px,5vw,56px) 0; border-bottom:1px solid var(--rule)}
+  .city[hidden]{display:none}
+  .city h2{font-family:var(--serif); font-weight:400; font-size:clamp(34px,4.4vw,52px); line-height:1; margin:0; position:sticky; top:calc(env(safe-area-inset-top,0px) + 24px); align-self:start}
+  .city h2 small{display:block; font-family:var(--sans); font-size:14px; color:var(--muted); margin-top:10px; line-height:1.4}
+  .spots{display:grid; gap:36px}
+  .spot[hidden]{display:none}
+  .line{display:flex; align-items:baseline; gap:10px}
+  .line h3{font-family:var(--serif); font-weight:500; font-size:clamp(24px,2.5vw,30px); line-height:1.15; margin:0; flex:0 1 auto}
+  .line .dots{flex:1 1 auto; border-bottom:2px dotted var(--rule); transform:translateY(-6px); min-width:24px}
+  .line .who{flex:0 0 auto; font-family:var(--serif); font-style:italic; font-size:19px; color:var(--ink-2)}
+  .what{margin:6px 0 10px; font-size:14px; color:var(--muted)}
+  .why{margin:0; max-width:36em; color:var(--ink)}
+  .said{font-family:var(--serif); font-style:italic; font-size:19px; color:var(--ink-2); margin:12px 0 0; max-width:34em}
+  .meta{display:flex; flex-wrap:wrap; gap:8px 16px; margin-top:14px; font-size:14px; align-items:center}
+  .tag{background:var(--wash); color:var(--ink-2); padding:3px 10px; border-radius:4px}
+  .meta a{text-underline-offset:3px; color:var(--ink-2)}
+  .meta a:hover{color:var(--ink)}
+  .gone .line h3{text-decoration:line-through; text-decoration-thickness:1px; text-decoration-color:var(--muted)}
+
+  /* closing */
+  .rule-of-house{padding:clamp(64px,9vw,120px) 0; display:grid; grid-template-columns:minmax(0,260px) minmax(0,1fr); gap:clamp(20px,4vw,56px)}
+  .rule-of-house h2{font-family:var(--serif); font-weight:400; font-size:clamp(34px,4.4vw,52px); line-height:1; margin:0}
+  .rule-of-house p{font-family:var(--serif); font-size:clamp(20px,2.2vw,26px); line-height:1.45; margin:0 0 .8em; max-width:28em}
+  footer{border-top:1px solid var(--rule); padding:22px 0 40px; font-size:14px; color:var(--muted); display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px}
+
+  @media (max-width:760px){
+    .city, .rule-of-house{grid-template-columns:minmax(0,1fr)}
+    .city h2{position:static}
+    .line{flex-wrap:wrap}
+    .line .dots{display:none}
+    .line .who{flex-basis:100%; font-size:17px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="strip"><strong>Ghost Note</strong><span>Monday icebreaker, September 21, 2026</span></div>
+
+  <header class="hero">
+    <h1>Where we'd take you.</h1>
+    <p class="lede">Natalia asked a simple question at the top of the week: what's your favorite restaurant in your hometown, or the city you're in now? Eleven of us answered. Here's the list, the reasons, and the vibes, so the next time you're in someone's city you already know where dinner is.</p>
+    <div class="toast">
+      <p>I rarely go for the food. I go to make memories. A great conversation is had over a bottle, and it doesn't have to be deep. It can just be banter.</p>
+      <span>Fredo, setting the tone</span>
+    </div>
+  </header>
+
+  <nav class="index" aria-label="Cities">
+    <p>Jump to a city</p>
+    <ul id="cityIndex"></ul>
+  </nav>
+
+  <div class="filters" role="group" aria-label="Filter spots">
+    <span>Show</span>
+    <button type="button" data-f="all" aria-pressed="true">Everything</button>
+    <button type="button" data-f="ramen" aria-pressed="false">Ramen heads</button>
+    <button type="button" data-f="pizza" aria-pressed="false">Pizza lane</button>
+    <button type="button" data-f="memory" aria-pressed="false">Memories</button>
+    <button type="button" data-f="vibes" aria-pressed="false">Here for the vibes</button>
+    <button type="button" data-f="drinks" aria-pressed="false">Good for a drink</button>
+  </div>
+
+  <main id="cities"></main>
+
+  <section class="rule-of-house" aria-labelledby="house">
+    <h2 id="house">House rules</h2>
+    <div>
+      <p>Six of us are ramen people. That's not a trend, that's a caucus.</p>
+      <p>The best spots on this list aren't the fanciest. They're the ones somebody went to with their grandmother, or after a graduation, or every week until the owners gave them a Christmas present.</p>
+      <p>If you're headed to someone's city, text them first. Aminata has a whole list for Detroit. Amiri is already planning your night in Portland. Adam wants you to see the bathroom.</p>
+    </div>
+  </section>
+
+  <footer>
+    <span>Pulled from the Weekly GN Team Meeting, 9/21/26.</span>
+    <span>Map links open a search, so double check hours before you go.</span>
+  </footer>
+</div>
+
+<script>
+const m = q => "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q);
+
+const cities = [
+  { id:"seattle", name:"Seattle", note:"Capitol Hill", spots:[
+    { name:"Spinasse", who:"Fredo", what:"Northern Italian, Capitol Hill",
+      why:"Fell in love with this one. Handmade pasta, the kind of meal you think about for a week. Fredo and Betty eat their way through every city they land in because it's the fastest way to learn a place.",
+      said:"Just amazing Italian food. Something to die for.",
+      tags:["memory","vibes"], map:"Cafe Spinasse Seattle" }
+  ]},
+  { id:"baltimore", name:"Baltimore", note:"Remington", spots:[
+    { name:"Flour and Wood", who:"Natalia", what:"Café by day, Neapolitan pizza by night",
+      why:"A couple blocks from home. It's a café that flips into a pizza spot once the lights go down, from the same group behind Café Dear Leon. Their newest concept and Natalia's latest great dinner.",
+      said:"A cafe that flips to a pizza spot at night.",
+      tags:["pizza","vibes"], map:"Flour and Wood Baltimore" }
+  ]},
+  { id:"dc", name:"Washington, D.C.", note:"Plus one Silver Spring legend", spots:[
+    { name:"Lauriol Plaza", who:"Jason", what:"Mexican and Latin, Dupont",
+      why:"Ingrained since childhood. Birthdays, graduations, whatever the occasion, this is where the family ended up.",
+      tags:["memory"], map:"Lauriol Plaza Washington DC" },
+    { name:"Cactus Cantina", who:"Jason", what:"Tex-Mex, Cathedral Heights",
+      why:"The other half of Jason's childhood staple pair. Still on rotation today.",
+      tags:["memory"], map:"Cactus Cantina Washington DC" },
+    { name:"Menomale", who:"Jason", what:"Neapolitan pizza, five to ten minutes from Jason",
+      why:"Keeping it in the pizza lane. Jason says he could eat it every single day.",
+      tags:["pizza"], map:"Menomale pizza Washington DC" },
+    { name:"Yellow", who:"Steven", what:"Levantine café, Union Market",
+      why:"One of the tastiest spots in the city. The pitas are the move, and the coffee program is run really well. You walk in knowing a good meal is guaranteed.",
+      said:"Pretty much a guaranteed delicious meal ahead of you.",
+      tags:["drinks"], map:"Yellow Union Market Washington DC" },
+    { name:"Daikaya", who:"Brandon", what:"Ramen, downtown by the arena",
+      why:"Brandon's favorite bowl in D.C.",
+      tags:["ramen"], map:"Daikaya Washington DC" },
+    { name:"Crisfield", who:"Steven", what:"Seafood, Georgia Ave, Silver Spring. Closed.", gone:true,
+      why:"A hole in the wall seafood spot Steven went to with his grandmother as a kid. If she was treating, it was a whole thing. It closed about six months ago. On the last day there was a long line of people who all had fifty-plus years of memories in that room.",
+      said:"All of these people had experienced this place and had these memories.",
+      tags:["memory"] }
+  ]},
+  { id:"portland", name:"Portland", note:"Amiri's city for 11 years", spots:[
+    { name:"Kann and Sousòl", who:"Amiri", what:"Haitian live-fire cooking, with a pan-Caribbean bar downstairs",
+      why:"Chef Gregory Gourdet's place, and it landed toward the end of Amiri's time in Portland. Bright dining room upstairs, moody basement bar underneath that's just as good. If you're ever in Portland, Amiri's taking you.",
+      said:"If anybody's ever in Portland, I'm gonna...",
+      tags:["vibes","drinks"], map:"Kann restaurant Portland", site:"https://gregorygourdet.com/restaurant" }
+  ]},
+  { id:"la", name:"Los Angeles", note:"Little Tokyo", spots:[
+    { name:"Amiri's ramen spot", who:"Amiri", what:"Ramen, Little Tokyo. Has a vegan option, so you can't say no.",
+      why:"Amiri is a self-described ramen head. The name came through the recording as \"Takayuno,\" which is probably Daikokuya. Confirm with Amiri before you go.",
+      said:"If anybody comes to this coast, that's where I'm taking you.",
+      tags:["ramen"], map:"ramen Little Tokyo Los Angeles" }
+  ]},
+  { id:"austin", name:"Austin", note:"SXSW, with Steve", spots:[
+    { name:"The barbecue that started it all", who:"Brandon", what:"Texas barbecue, name lost to the smoke",
+      why:"Brandon thought the portions were small. Got to the front, owed about a hundred dollars, and walked away with a mountain of meat. That meal is why he got into smoking.",
+      said:"Shout out to Austin barbecue.",
+      tags:["memory"], map:"best barbecue Austin TX" }
+  ]},
+  { id:"detroit", name:"Detroit", note:"Two locals, seven spots", spots:[
+    { name:"Ima", who:"Aminata", what:"Black-owned Japanese noodle bar",
+      why:"Ramen, udon, dumplings, and a five dollar happy hour. Because happy hour isn't happy houring like it used to.",
+      tags:["ramen","drinks"], map:"Ima Detroit", site:"https://imanoodles.com" },
+    { name:"Selden Standard", who:"Aminata", what:"Farm to table, Midtown",
+      why:"Everything's fresh, drinks are great, food is great.",
+      tags:["drinks"], map:"Selden Standard Detroit" },
+    { name:"Mezcal", who:"Aminata", what:"New Mexican spot",
+      why:"A recent find. Aminata's rule: at this age, the food should always be good.",
+      said:"I want to spend my money on things that taste good.",
+      tags:[], map:"Mezcal restaurant Detroit" },
+    { name:"KG", who:"Aminata", what:"Senegalese, Garden City",
+      why:"Right outside Detroit. Aminata was there last night.",
+      tags:[], map:"Senegalese restaurant Garden City Michigan" },
+    { name:"Johnny Noodle King", who:"LaTrice", what:"Ramen",
+      why:"They put smoked butter in the ramen, so the whole bowl comes out smoky and buttery.",
+      tags:["ramen"], map:"Johnny Noodle King Detroit" },
+    { name:"Leila", who:"LaTrice", what:"Lebanese",
+      why:"Detroit has one of the largest Middle Eastern communities in the country, so LaTrice grew up on this food. Leila is the one that stays consistent, which is why she keeps going back.",
+      said:"Half the time the restaurants are there for vibes. This one I go back to.",
+      tags:["vibes"], map:"Leila restaurant Detroit" },
+    { name:"Sip N Read", who:"LaTrice", what:"Black-owned book and wine bar, Corktown",
+      why:"Not a restaurant, but it's become LaTrice's third space. She was there until close yesterday drinking wine, reading, and working.",
+      tags:["vibes","drinks"], map:"Sip N Read Book Bar Detroit" }
+  ]},
+  { id:"orlando", name:"Orlando", note:"SoDo", spots:[
+    { name:"Hamlin House", who:"Nadja", what:"Pickleball club with a full restaurant and coffee bar",
+      why:"Went for a happy hour drink, came back with friends for the food, and it was really good both times. Nobody was playing pickleball either time. The key lime pie is the best Nadja's ever had, and she's not even a key lime person.",
+      said:"Not to play pickleball, but to eat food.",
+      tags:["vibes","drinks"], map:"Hamlin House Orlando" }
+  ]},
+  { id:"boston", name:"Medford", note:"Boston area", spots:[
+    { name:"Pikaichi", who:"Sarah", what:"Ramen",
+      why:"Sarah went so often, multiple times a week, that they gave her a Christmas present for keeping the doors open. When she was back in Massachusetts she made a whole day of Boston just for this.",
+      tags:["ramen","memory"], map:"Pikaichi ramen Medford MA" }
+  ]},
+  { id:"newbedford", name:"New Bedford", note:"Cove Road, summers only", spots:[
+    { name:"Cove, then Dairy Maid", who:"Sarah", what:"Scallops, then ice cream across the street",
+      why:"A growing-up tradition. Get the scallops, walk across the street for ice cream. Sarah refuses to be in New Bedford in the summer and skip it. And yes, New Bedford supplies most of the country's scallops, so she gets to pronounce it however she wants.",
+      tags:["memory"], map:"Dairy Maid 1517 Cove Rd New Bedford MA" }
+  ]},
+  { id:"denver", name:"Denver", note:"LoHi", spots:[
+    { name:"Kawa Ni", who:"Adam", what:"Izakaya in an old firehouse",
+      why:"The Hawaiian-inspired swordfish bao is the kind of thing you order six more of with no shame. It's a sexy restaurant: the music, the staff with swag and intricate tattoos, everybody dressed up. And they splurged on the bathroom. Heated seat, adjustable temperature. It's part of the experience. Ask Adam.",
+      said:"You can give me six more of those, and I have no shame.",
+      tags:["vibes","ramen"], map:"Kawa Ni Denver", site:"https://www.kawanidenver.com" }
+  ]}
+];
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const main = document.getElementById("cities");
+const idx = document.getElementById("cityIndex");
+
+cities.forEach(c => {
+  idx.insertAdjacentHTML("beforeend", `<li><a href="#${c.id}">${esc(c.name)}<sup>${c.spots.length}</sup></a></li>`);
+  const spots = c.spots.map(s => `
+    <article class="spot${s.gone ? " gone" : ""}" data-tags="${s.tags.join(" ")}">
+      <div class="line"><h3>${esc(s.name)}</h3><span class="dots" aria-hidden="true"></span><span class="who">${esc(s.who)}</span></div>
+      <p class="what">${esc(s.what)}</p>
+      <p class="why">${esc(s.why)}</p>
+      ${s.said ? `<p class="said">"${esc(s.said)}"</p>` : ""}
+      <div class="meta">
+        ${s.tags.map(t => `<span class="tag">${({ramen:"Ramen",pizza:"Pizza",memory:"Memories",vibes:"Vibes",drinks:"Drinks"})[t]}</span>`).join("")}
+        ${s.map ? `<a href="${m(s.map)}" target="_blank" rel="noopener">Find it on a map</a>` : ""}
+        ${s.site ? `<a href="${s.site}" target="_blank" rel="noopener">Their site</a>` : ""}
+      </div>
+    </article>`).join("");
+  main.insertAdjacentHTML("beforeend", `
+    <section class="city" id="${c.id}" aria-labelledby="h-${c.id}">
+      <h2 id="h-${c.id}">${esc(c.name)}<small>${esc(c.note)}</small></h2>
+      <div class="spots">${spots}</div>
+    </section>`);
+});
+
+document.querySelectorAll(".filters button").forEach(b => b.addEventListener("click", () => {
+  const f = b.dataset.f;
+  document.querySelectorAll(".filters button").forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+  document.querySelectorAll(".city").forEach(sec => {
+    let any = false;
+    sec.querySelectorAll(".spot").forEach(sp => {
+      const show = f === "all" || sp.dataset.tags.split(" ").includes(f);
+      sp.hidden = !show; if (show) any = true;
+    });
+    sec.hidden = !any;
+  });
+}));
+</script>
+</body>
+</html>
