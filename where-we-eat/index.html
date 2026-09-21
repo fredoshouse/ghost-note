@@ -6,41 +6,55 @@
 <title>Where we'd take you | Ghost Note</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400;1,9..40,500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#F3F0EA; --ink:#1C1B19; --ink-2:#4A4741; --muted:#8A857C; --rule:#D6D1C6; --wash:#E8E4DB;
-    --serif:"Newsreader", Georgia, "Times New Roman", serif;
-    --sans:"Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --paper:#FBFAF7; --ink:#141414; --ink-2:#5A5853; --muted:#86837C; --rule:#E1DDD3; --wash:#EFEDE6;
+    --lime:#C6F23E; --lime-deep:#A7D516; --purple:#3B1E6E;
+    --footer-bg:#141414; --footer-ink:#A6A29A;
+    --serif:'Playfair Display', Georgia, "Times New Roman", serif;
+    --sans:'DM Sans', system-ui, -apple-system, "Segoe UI", sans-serif;
     box-sizing:border-box;
     padding-top:env(safe-area-inset-top,0px);
     padding-bottom:env(safe-area-inset-bottom,0px);
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --paper:#181715; --ink:#EDEAE3; --ink-2:#BDB8AE; --muted:#8C877E; --rule:#34322E; --wash:#23221F;
+      --paper:#141414; --ink:#FBFAF7; --ink-2:#C9C5BC; --muted:#928E86; --rule:#2E2C28; --wash:#201F1C;
     }
   }
   :root[data-theme="dark"]{
-    --paper:#181715; --ink:#EDEAE3; --ink-2:#BDB8AE; --muted:#8C877E; --rule:#34322E; --wash:#23221F;
+      --paper:#141414; --ink:#FBFAF7; --ink-2:#C9C5BC; --muted:#928E86; --rule:#2E2C28; --wash:#201F1C;
   }
   *,*::before,*::after{box-sizing:inherit}
   html{scroll-padding-top:env(safe-area-inset-top,0px); scroll-behavior:smooth}
   @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{transition:none!important;animation:none!important} }
   body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--sans); font-size:17px; line-height:1.55; -webkit-font-smoothing:antialiased}
   a{color:inherit}
+  ::selection{background:var(--lime); color:#141414}
   a:focus-visible, button:focus-visible{outline:2px solid var(--ink); outline-offset:3px; border-radius:2px}
   .wrap{max-width:1120px; margin:0 auto; padding:0 clamp(20px,5vw,56px)}
 
   /* top strip */
-  .strip{display:flex; justify-content:space-between; align-items:baseline; padding:22px 0; border-bottom:1px solid var(--rule); font-size:14px; color:var(--ink-2)}
-  .strip strong{font-family:var(--serif); font-style:italic; font-weight:400; font-size:20px; color:var(--ink)}
+  .strip{display:flex; justify-content:space-between; align-items:center; gap:16px; padding:20px 0; border-bottom:1px solid var(--rule); font-size:14px; color:var(--ink-2)}
+  .brand{display:inline-flex; align-items:center; line-height:0; text-decoration:none}
+  .brand img{height:26px; width:auto; display:block}
+  .brand-wordmark{display:none; font-family:var(--serif); font-style:italic; font-weight:600; font-size:21px; color:var(--ink); line-height:1}
+  .brand.no-img img{display:none}
+  .brand.no-img .brand-wordmark{display:inline}
+  .brand .on-dark{display:none}
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]) .brand .on-light{display:none}
+    :root:not([data-theme="light"]) .brand .on-dark{display:block}
+  }
+  :root[data-theme="dark"] .brand .on-light{display:none}
+  :root[data-theme="dark"] .brand .on-dark{display:block}
 
   /* hero */
   .hero{padding:clamp(56px,11vw,140px) 0 clamp(40px,7vw,80px)}
   .hero h1{font-family:var(--serif); font-weight:300; font-style:italic; font-size:clamp(56px,11vw,148px); line-height:.92; letter-spacing:-.02em; margin:0 0 .35em; max-width:10ch}
   .hero .lede{max-width:34em; font-size:clamp(17px,1.6vw,19px); color:var(--ink-2); margin:0}
-  .toast{margin-top:clamp(40px,6vw,72px); display:grid; grid-template-columns:minmax(0,1fr); max-width:40em; border-left:1px solid var(--ink); padding-left:22px}
+  .toast{margin-top:clamp(40px,6vw,72px); display:grid; grid-template-columns:minmax(0,1fr); max-width:40em; border-left:3px solid var(--lime); padding-left:22px}
   .toast p{font-family:var(--serif); font-size:clamp(22px,2.6vw,30px); line-height:1.3; margin:0 0 .5em}
   .toast span{font-size:14px; color:var(--muted)}
 
@@ -56,7 +70,8 @@
   .filters{display:flex; flex-wrap:wrap; gap:8px; padding:28px 0 8px; align-items:center}
   .filters span{font-size:14px; color:var(--muted); margin-right:6px}
   .filters button{font:inherit; font-size:14px; background:transparent; color:var(--ink); border:1px solid var(--rule); border-radius:999px; padding:6px 14px; cursor:pointer}
-  .filters button[aria-pressed="true"]{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+  .filters button:hover{border-color:var(--ink-2)}
+  .filters button[aria-pressed="true"]{background:var(--lime); color:#141414; border-color:var(--lime)}
 
   /* city sections */
   .city{display:grid; grid-template-columns:minmax(0,260px) minmax(0,1fr); gap:clamp(20px,4vw,56px); padding:clamp(36px,5vw,56px) 0; border-bottom:1px solid var(--rule)}
@@ -82,7 +97,14 @@
   .rule-of-house{padding:clamp(64px,9vw,120px) 0; display:grid; grid-template-columns:minmax(0,260px) minmax(0,1fr); gap:clamp(20px,4vw,56px)}
   .rule-of-house h2{font-family:var(--serif); font-weight:400; font-size:clamp(34px,4.4vw,52px); line-height:1; margin:0}
   .rule-of-house p{font-family:var(--serif); font-size:clamp(20px,2.2vw,26px); line-height:1.45; margin:0 0 .8em; max-width:28em}
-  footer{border-top:1px solid var(--rule); padding:22px 0 40px; font-size:14px; color:var(--muted); display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px}
+  footer{border-top:3px solid var(--lime); background:var(--footer-bg); color:var(--footer-ink); padding:clamp(28px,4vw,40px) 0 clamp(36px,5vw,52px); font-size:14px}
+  footer .wrap{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:18px}
+  footer img{height:30px; width:auto; display:block; flex:0 0 auto}
+  footer .brand-wordmark{color:#FBFAF7; font-size:23px}
+  footer .foot-brand.no-img img{display:none}
+  footer .foot-brand.no-img .brand-wordmark{display:inline}
+  footer .foot-meta{display:flex; flex-direction:column; gap:4px; text-align:right; max-width:46ch}
+  @media (max-width:560px){ footer .foot-meta{text-align:left} }
 
   @media (max-width:760px){
     .city, .rule-of-house{grid-template-columns:minmax(0,1fr)}
@@ -95,7 +117,14 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="strip"><strong>Ghost Note</strong><span>Monday icebreaker, September 21, 2026</span></div>
+  <div class="strip">
+    <a class="brand" href="https://www.ghostnoteagency.com" target="_blank" rel="noopener">
+      <img class="on-light" src="https://www.ghostnoteagency.com/wp-content/uploads/2022/02/GN_2020_Logo-horizontal-small-1.png" alt="Ghost Note" onerror="this.closest('.brand').classList.add('no-img')">
+      <img class="on-dark" src="https://www.ghostnoteagency.com/wp-content/uploads/2023/01/ghost-note-logo-white.png" alt="Ghost Note" onerror="this.closest('.brand').classList.add('no-img')">
+      <strong class="brand-wordmark">Ghost Note</strong>
+    </a>
+    <span>Monday icebreaker, September 21, 2026</span>
+  </div>
 
   <header class="hero">
     <h1>Where we'd take you.</h1>
@@ -132,11 +161,20 @@
     </div>
   </section>
 
-  <footer>
-    <span>Pulled from the Weekly GN Team Meeting, 9/21/26.</span>
-    <span>Map links open a search, so double check hours before you go.</span>
-  </footer>
 </div>
+
+<footer>
+  <div class="wrap">
+    <span class="foot-brand brand">
+      <img src="https://www.ghostnoteagency.com/wp-content/uploads/2023/01/ghost-note-logo-white.png" alt="Ghost Note" onerror="this.closest('.foot-brand').classList.add('no-img')">
+      <strong class="brand-wordmark">Ghost Note</strong>
+    </span>
+    <div class="foot-meta">
+      <span>Pulled from the Weekly GN Team Meeting, 9/21/26.</span>
+      <span>Map links open a search, so double check hours before you go.</span>
+    </div>
+  </div>
+</footer>
 
 <script>
 const m = q => "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q);
