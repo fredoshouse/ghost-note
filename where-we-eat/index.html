@@ -27,6 +27,7 @@
       --paper:#141414; --ink:#FBFAF7; --ink-2:#C9C5BC; --muted:#928E86; --rule:#2E2C28; --wash:#201F1C;
   }
   *,*::before,*::after{box-sizing:inherit}
+  [hidden]{display:none!important}
   html{scroll-padding-top:env(safe-area-inset-top,0px); scroll-behavior:smooth}
   @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{transition:none!important;animation:none!important} }
   body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--sans); font-size:17px; line-height:1.55; -webkit-font-smoothing:antialiased}
@@ -57,6 +58,9 @@
   .toast{margin-top:clamp(40px,6vw,72px); display:grid; grid-template-columns:minmax(0,1fr); max-width:40em; border-left:3px solid var(--lime); padding-left:22px}
   .toast p{font-family:var(--serif); font-size:clamp(22px,2.6vw,30px); line-height:1.3; margin:0 0 .5em}
   .toast span{font-size:14px; color:var(--muted)}
+  .invite{margin:clamp(28px,4vw,40px) 0 0; font-size:17px}
+  .invite a{text-decoration:none; border-bottom:3px solid var(--lime); padding-bottom:2px}
+  .invite a:hover{border-bottom-color:var(--lime-deep)}
 
   /* city index */
   .index{border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); padding:28px 0 32px}
@@ -72,6 +76,17 @@
   .filters button{font:inherit; font-size:14px; background:transparent; color:var(--ink); border:1px solid var(--rule); border-radius:999px; padding:6px 14px; cursor:pointer}
   .filters button:hover{border-color:var(--ink-2)}
   .filters button[aria-pressed="true"]{background:var(--lime); color:#141414; border-color:var(--lime)}
+  .filters.people{padding:10px 0 4px}
+  .filters.people button{display:inline-flex; align-items:center; gap:7px; padding:4px 14px 4px 5px}
+  .filters.people button[data-f="all"]{padding:6px 14px}
+  .empty{padding:48px 0 8px; font-family:var(--serif); font-size:clamp(20px,2.2vw,26px); color:var(--ink-2); margin:0}
+  .empty[hidden]{display:none}
+  .empty button{font:inherit; font-size:inherit; background:none; border:0; padding:0; color:var(--ink); cursor:pointer; text-decoration:underline; text-underline-offset:4px}
+
+  /* avatars */
+  .ava{position:relative; display:inline-grid; place-items:center; flex:0 0 auto; width:26px; height:26px; border-radius:50%; overflow:hidden; background:var(--wash); color:var(--ink-2); font-family:var(--sans); font-style:normal; font-weight:600; font-size:12px; line-height:1}
+  .ava img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover}
+  .filters.people .ava{width:24px; height:24px; font-size:11px}
 
   /* city sections */
   .city{display:grid; grid-template-columns:minmax(0,260px) minmax(0,1fr); gap:clamp(20px,4vw,56px); padding:clamp(36px,5vw,56px) 0; border-bottom:1px solid var(--rule)}
@@ -83,7 +98,7 @@
   .line{display:flex; align-items:baseline; gap:10px}
   .line h3{font-family:var(--serif); font-weight:500; font-size:clamp(24px,2.5vw,30px); line-height:1.15; margin:0; flex:0 1 auto}
   .line .dots{flex:1 1 auto; border-bottom:2px dotted var(--rule); transform:translateY(-6px); min-width:24px}
-  .line .who{flex:0 0 auto; font-family:var(--serif); font-style:italic; font-size:19px; color:var(--ink-2)}
+  .line .who{flex:0 0 auto; display:inline-flex; align-items:center; gap:8px; font-family:var(--serif); font-style:italic; font-size:19px; color:var(--ink-2)}
   .what{margin:6px 0 10px; font-size:14px; color:var(--muted)}
   .why{margin:0; max-width:36em; color:var(--ink)}
   .said{font-family:var(--serif); font-style:italic; font-size:19px; color:var(--ink-2); margin:12px 0 0; max-width:34em}
@@ -92,6 +107,43 @@
   .meta a{text-underline-offset:3px; color:var(--ink-2)}
   .meta a:hover{color:var(--ink)}
   .gone .line h3{text-decoration:line-through; text-decoration-thickness:1px; text-decoration-color:var(--muted)}
+
+  /* feedback */
+  .feedback{border-top:1px solid var(--rule); padding:clamp(48px,7vw,84px) 0; display:grid; grid-template-columns:minmax(0,260px) minmax(0,1fr); gap:clamp(20px,4vw,56px)}
+  .feedback h2{font-family:var(--serif); font-weight:400; font-size:clamp(34px,4.4vw,52px); line-height:1; margin:0}
+  .feedback h3{font-family:var(--serif); font-weight:500; font-size:clamp(24px,2.5vw,30px); line-height:1.15; margin:0}
+  .fb-lede{margin:6px 0 16px; font-size:14px; color:var(--muted); max-width:44ch}
+  .fb-note{font-size:14px; color:var(--muted)}
+  .fb-note[hidden]{display:none}
+  .scale{display:flex; flex-wrap:wrap; gap:8px}
+  .scale button{font:inherit; font-size:17px; min-width:52px; background:transparent; color:var(--ink); border:1px solid var(--rule); border-radius:999px; padding:8px 16px; cursor:pointer}
+  .scale button:hover:not(:disabled){border-color:var(--ink-2)}
+  .scale button[aria-pressed="true"]{background:var(--lime); color:#141414; border-color:var(--lime)}
+  .scale button:disabled{cursor:default; opacity:.75}
+  .scale button[aria-pressed="true"]:disabled{opacity:1}
+  .tally{list-style:none; margin:20px 0 0; padding:0; display:grid; gap:7px; max-width:34em}
+  .tally[hidden]{display:none}
+  .tally li{display:grid; grid-template-columns:2.2em minmax(0,1fr) 2.6em; align-items:center; gap:10px; font-size:14px; color:var(--ink-2)}
+  .tally .bar{height:9px; border-radius:999px; background:var(--wash); overflow:hidden}
+  .tally .bar i{display:block; height:100%; background:var(--lime-deep); border-radius:999px; transition:width .35s ease}
+  .tally .n{text-align:right; color:var(--muted); font-variant-numeric:tabular-nums}
+  .add{margin-top:clamp(36px,5vw,52px)}
+  .fields{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px; max-width:40em}
+  .add label{display:block; font-size:14px; color:var(--muted)}
+  .add label.wide{max-width:40em; margin-top:12px}
+  .add input, .add textarea{display:block; width:100%; margin-top:5px; font:inherit; font-size:16px; color:var(--ink); background:var(--paper); border:1px solid var(--rule); border-radius:6px; padding:9px 11px; resize:vertical}
+  .add input:focus-visible, .add textarea:focus-visible{outline:2px solid var(--ink); outline-offset:1px}
+  .add .trap{position:absolute; left:-9999px; width:1px; height:1px}
+  .add [type="submit"]{margin-top:16px; font:inherit; font-size:15px; font-weight:600; background:var(--lime); color:#141414; border:1px solid var(--lime); border-radius:999px; padding:10px 22px; cursor:pointer}
+  .add [type="submit"]:hover:not(:disabled){background:var(--lime-deep); border-color:var(--lime-deep)}
+  .add [type="submit"]:disabled{opacity:.55; cursor:default}
+  .add .fb-note{margin-left:12px}
+  .picks{list-style:none; margin:28px 0 0; padding:0; display:grid; gap:22px}
+  .picks li{border-left:2px solid var(--wash); padding-left:16px}
+  .picks h4{font-family:var(--serif); font-weight:500; font-size:21px; line-height:1.2; margin:0}
+  .picks .pick-what{margin:4px 0 0; font-size:14px; color:var(--muted)}
+  .picks .pick-why{margin:7px 0 0; max-width:36em}
+  @media (max-width:760px){ .feedback{grid-template-columns:minmax(0,1fr)} }
 
   /* closing */
   .rule-of-house{padding:clamp(64px,9vw,120px) 0; display:grid; grid-template-columns:minmax(0,260px) minmax(0,1fr); gap:clamp(20px,4vw,56px)}
@@ -133,6 +185,7 @@
       <p>I rarely go for the food. I go to make memories. A great conversation is had over a bottle, and it doesn't have to be deep. It can just be banter.</p>
       <span>Fredo, setting the tone</span>
     </div>
+    <p class="invite"><a href="#feedback">Where would you take us? Add your spot &rarr;</a></p>
   </header>
 
   <nav class="index" aria-label="Cities">
@@ -140,7 +193,7 @@
     <ul id="cityIndex"></ul>
   </nav>
 
-  <div class="filters" role="group" aria-label="Filter spots">
+  <div class="filters" data-group="tag" role="group" aria-label="Filter spots by kind">
     <span>Show</span>
     <button type="button" data-f="all" aria-pressed="true">Everything</button>
     <button type="button" data-f="ramen" aria-pressed="false">Ramen heads</button>
@@ -150,7 +203,49 @@
     <button type="button" data-f="drinks" aria-pressed="false">Good for a drink</button>
   </div>
 
+  <div class="filters people" data-group="who" role="group" aria-label="Filter spots by person">
+    <span>Whose pick</span>
+    <button type="button" data-f="all" aria-pressed="true">Anyone</button>
+  </div>
+
   <main id="cities"></main>
+  <p class="empty" id="empty" hidden>Nobody picked that combination. <button type="button" id="resetFilters">Show everything</button></p>
+
+
+  <section class="feedback" id="feedback" aria-labelledby="fb-h">
+    <h2 id="fb-h">How'd we do?</h2>
+    <div>
+      <div id="poll">
+        <p class="fb-lede">Rate the list, 1 to 5. One tap, nothing attached to your name.</p>
+        <div class="scale" role="group" aria-label="Rate this list from 1 to 5">
+          <button type="button" data-r="1" aria-pressed="false">1</button>
+          <button type="button" data-r="2" aria-pressed="false">2</button>
+          <button type="button" data-r="3" aria-pressed="false">3</button>
+          <button type="button" data-r="4" aria-pressed="false">4</button>
+          <button type="button" data-r="5" aria-pressed="false">5</button>
+        </div>
+        <ol class="tally" id="tally" hidden></ol>
+        <p class="fb-note" id="pollNote" role="status"></p>
+      </div>
+
+      <div class="add" id="add">
+        <h3>Where would you take us?</h3>
+        <p class="fb-lede">Name the place you'd walk us into in your city, and why. It shows up below for everyone.</p>
+        <form id="addForm" novalidate>
+          <div class="fields">
+            <label>Spot<input name="name" maxlength="80" autocomplete="off" required></label>
+            <label>City<input name="city" maxlength="60" autocomplete="off" required></label>
+            <label>You<input name="who" maxlength="40" autocomplete="off"></label>
+          </div>
+          <label class="wide">Why it belongs<textarea name="why" rows="3" maxlength="400"></textarea></label>
+          <input class="trap" name="trap" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <button type="submit">Add your spot</button>
+          <span class="fb-note" id="addNote" role="status"></span>
+        </form>
+        <ul class="picks" id="picks"></ul>
+      </div>
+    </div>
+  </section>
 
   <section class="rule-of-house" aria-labelledby="house">
     <h2 id="house">House rules</h2>
@@ -282,14 +377,25 @@ const cities = [
 ];
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+// Drop a headshot in assets/headshots/ and add one line here; until then each
+// person renders as a monogram, so the layout is the same either way.
+const HEADSHOTS = {
+  // fredo: "assets/headshots/fredo.jpg",
+};
+const slug = n => n.toLowerCase().replace(/[^a-z0-9]/g, "");
+const ava = name => {
+  const src = HEADSHOTS[slug(name)];
+  return `<span class="ava" aria-hidden="true">${src ? `<img src="${esc(src)}" alt="" loading="lazy" onerror="this.remove()">` : ""}<b>${esc(name.trim()[0].toUpperCase())}</b></span>`;
+};
 const main = document.getElementById("cities");
 const idx = document.getElementById("cityIndex");
 
 cities.forEach(c => {
   idx.insertAdjacentHTML("beforeend", `<li><a href="#${c.id}">${esc(c.name)}<sup>${c.spots.length}</sup></a></li>`);
   const spots = c.spots.map(s => `
-    <article class="spot${s.gone ? " gone" : ""}" data-tags="${s.tags.join(" ")}">
-      <div class="line"><h3>${esc(s.name)}</h3><span class="dots" aria-hidden="true"></span><span class="who">${esc(s.who)}</span></div>
+    <article class="spot${s.gone ? " gone" : ""}" data-tags="${s.tags.join(" ")}" data-who="${esc(s.who)}">
+      <div class="line"><h3>${esc(s.name)}</h3><span class="dots" aria-hidden="true"></span><span class="who">${ava(s.who)}<span>${esc(s.who)}</span></span></div>
       <p class="what">${esc(s.what)}</p>
       <p class="why">${esc(s.why)}</p>
       ${s.said ? `<p class="said">"${esc(s.said)}"</p>` : ""}
@@ -306,18 +412,173 @@ cities.forEach(c => {
     </section>`);
 });
 
-document.querySelectorAll(".filters button").forEach(b => b.addEventListener("click", () => {
-  const f = b.dataset.f;
-  document.querySelectorAll(".filters button").forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+/* ---- filters: kind and person, combined ---- */
+const peopleRow = document.querySelector('.filters[data-group="who"]');
+const emptyEl = document.getElementById("empty");
+const active = { tag: "all", who: "all" };
+
+[...new Set(cities.flatMap(c => c.spots.map(s => s.who)))].forEach(person => {
+  peopleRow.insertAdjacentHTML("beforeend",
+    `<button type="button" data-f="${esc(person)}" aria-pressed="false">${ava(person)}${esc(person)}</button>`);
+});
+
+function applyFilters() {
+  let shown = 0;
   document.querySelectorAll(".city").forEach(sec => {
     let any = false;
     sec.querySelectorAll(".spot").forEach(sp => {
-      const show = f === "all" || sp.dataset.tags.split(" ").includes(f);
-      sp.hidden = !show; if (show) any = true;
+      const byTag = active.tag === "all" || sp.dataset.tags.split(" ").includes(active.tag);
+      const byWho = active.who === "all" || sp.dataset.who === active.who;
+      const show = byTag && byWho;
+      sp.hidden = !show;
+      if (show) { any = true; shown += 1; }
     });
     sec.hidden = !any;
   });
+  emptyEl.hidden = shown > 0;
+}
+
+function setFilter(group, value) {
+  active[group] = value;
+  document.querySelectorAll(`.filters[data-group="${group}"] button`).forEach(b =>
+    b.setAttribute("aria-pressed", b.dataset.f === value ? "true" : "false"));
+  applyFilters();
+}
+
+document.querySelectorAll(".filters").forEach(row => row.addEventListener("click", e => {
+  const btn = e.target.closest("button[data-f]");
+  if (btn) setFilter(row.dataset.group, btn.dataset.f);
 }));
+
+document.getElementById("resetFilters").addEventListener("click", () => {
+  setFilter("tag", "all");
+  setFilter("who", "all");
+});
+
+/* ---- feedback: poll + submissions, backed by /api/feedback ---- */
+const API = "/api/feedback";
+const VOTE_KEY = "gn-wwe-vote";
+const poll = document.getElementById("poll");
+const scale = poll.querySelector(".scale");
+const tallyEl = document.getElementById("tally");
+const pollNote = document.getElementById("pollNote");
+const addBlock = document.getElementById("add");
+const addForm = document.getElementById("addForm");
+const addNote = document.getElementById("addNote");
+const picksEl = document.getElementById("picks");
+const submitBtn = addForm.querySelector('[type="submit"]');
+
+const remembered = () => { try { return localStorage.getItem(VOTE_KEY); } catch { return null; } };
+const remember = r => { try { localStorage.setItem(VOTE_KEY, r); } catch {} };
+
+function lockScale(rating) {
+  scale.querySelectorAll("button").forEach(b => {
+    b.disabled = true;
+    b.setAttribute("aria-pressed", b.dataset.r === String(rating) ? "true" : "false");
+  });
+}
+
+function renderTally(tally) {
+  const counts = [1,2,3,4,5].map(r => tally?.[r] ?? 0);
+  const total = counts.reduce((a,b) => a+b, 0);
+  if (!total) { tallyEl.hidden = true; return; }
+  const top = Math.max(...counts);
+  tallyEl.innerHTML = counts.map((n, i) => `
+    <li><span>${i+1}</span><span class="bar"><i style="width:${top ? (n/top)*100 : 0}%"></i></span><span class="n">${n}</span></li>`).join("");
+  tallyEl.hidden = false;
+  const avg = counts.reduce((sum, n, i) => sum + n*(i+1), 0) / total;
+  pollNote.textContent = `${avg.toFixed(1)} average, ${total} ${total === 1 ? "vote" : "votes"}.`;
+}
+
+function renderPicks(picks) {
+  if (!picks?.length) { picksEl.innerHTML = ""; return; }
+  picksEl.innerHTML = picks.map(p => `
+    <li>
+      <h4>${esc(p.name)}</h4>
+      <p class="pick-what">${esc(p.city)}${p.who ? ` &middot; added by ${esc(p.who)}` : ""}</p>
+      ${p.why ? `<p class="pick-why">${esc(p.why)}</p>` : ""}
+    </li>`).join("");
+}
+
+function paint(data) {
+  renderTally(data.tally);
+  renderPicks(data.picks);
+}
+
+// No API behind this copy of the page (or no store connected yet): say so plainly
+// rather than leaving controls that quietly do nothing.
+function standDown(message) {
+  scale.hidden = true;
+  tallyEl.hidden = true;
+  addForm.hidden = true;
+  pollNote.textContent = message;
+  addNote.textContent = "";
+}
+
+async function call(options) {
+  const res = await fetch(API, options);
+  if (res.status === 503) throw new Error("not-connected");
+  if (!res.ok) throw new Error(`http-${res.status}`);
+  return res.json();
+}
+
+const OFFLINE = "Live voting isn't switched on for this copy of the page.";
+
+(async function boot() {
+  const mine = remembered();
+  if (mine) lockScale(mine);
+  try {
+    paint(await call({ headers: { accept: "application/json" } }));
+  } catch (err) {
+    standDown(err.message === "not-connected"
+      ? "Live voting isn't switched on yet — check back shortly."
+      : OFFLINE);
+  }
+})();
+
+scale.addEventListener("click", async e => {
+  const btn = e.target.closest("button[data-r]");
+  if (!btn || btn.disabled) return;
+  const rating = btn.dataset.r;
+  lockScale(rating);
+  pollNote.textContent = "Counting…";
+  try {
+    paint(await call({
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ type: "vote", rating })
+    }));
+    remember(rating);
+  } catch {
+    scale.querySelectorAll("button").forEach(b => { b.disabled = false; b.setAttribute("aria-pressed", "false"); });
+    pollNote.textContent = "That vote didn't go through. Try again?";
+  }
+});
+
+addForm.addEventListener("submit", async e => {
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(addForm).entries());
+  if (!data.name?.trim() || !data.city?.trim()) {
+    addNote.textContent = "Spot and city, at least.";
+    return;
+  }
+  submitBtn.disabled = true;
+  addNote.textContent = "Adding…";
+  try {
+    paint(await call({
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ type: "spot", ...data })
+    }));
+    addForm.reset();
+    addNote.textContent = "Added. Thanks.";
+  } catch (err) {
+    addNote.textContent = err.message === "not-connected" ? OFFLINE : "That didn't save. Try again?";
+  } finally {
+    submitBtn.disabled = false;
+  }
+});
+
 </script>
 </body>
 </html>

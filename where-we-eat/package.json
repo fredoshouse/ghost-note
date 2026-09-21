@@ -1,0 +1,8 @@
+{
+  "name": "gn-where-we-eat",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@vercel/blob": "2.8.0"
+  }
+}
